@@ -35,4 +35,6 @@ const dailyLogSchema = new mongoose.Schema({
     ]
 }, { timestamps: true });
 
+dailyLogSchema.index({ date: 1 });
+
 module.exports = mongoose.models.DailyLog || mongoose.model('DailyLog', dailyLogSchema);

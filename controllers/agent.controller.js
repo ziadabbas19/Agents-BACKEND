@@ -23,13 +23,13 @@ exports.createAgent = asyncHandler(async(req, res)=>{
 
     //AREAS
     let areasIds = [];
-    if(Area && areas.length > 0){
+    if(areas && areas.length > 0){
         // Get all existing areas in one query
         const existingAreas = await Area.find({name: {$in: areas}});
         const existingAreaNames = existingAreas.map(a => a.name)
 
         // Find which areas need to be created
-        const newAreaNames = (areas.filter(name=>!existingAreaName.includes(name)))
+        const newAreaNames = (areas.filter(name=>!existingAreaNames.includes(name)))
 
         // Create new areas in bulk
         let newAreas =[];
@@ -101,7 +101,7 @@ exports.getAllAgents = asyncHandler(async (req, res) => {
 //GET AGENT BY ID
 exports.getAgent = asyncHandler(async(req, res)=>{
     const agent = await Agent.findById(req.params.id).populate('areas');
-    if(!agent || agen.isDeleted){
+    if(!agent || agent.isDeleted){
         res.status(404);
         throw new Error('AGENT NOT FOUND');
     }
@@ -233,10 +233,16 @@ exports.deleteAgent = asyncHandler(async(req, res)=>{
 // REATORE AGENT
 exports.restoreAgent = asyncHandler(async(req, res)=>{
     const agent = await Agent.findById(req.params.id)
-        if(!agent.isDeleted){
+        if(!agent){
             res.status(404);
             throw new Error('AGENT NOT FOUND TO RESTORE')
         }
+
+        if(!agent.isDeleted){
+            res.status(400);
+            throw new Error('AGENT IS NOT DELETED')
+        }
+        
 
         agent.name = agent.name.replace(/ - deleted$/, '');
         agent.isDeleted = false;

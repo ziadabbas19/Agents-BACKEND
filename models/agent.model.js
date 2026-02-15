@@ -28,4 +28,11 @@ const agentSchema = new mongoose.Schema({
 },{timestamps:true})
 
 
+// Indexes 
+agentSchema.index({ code: 1 });
+agentSchema.index({ isDeleted: 1 });
+agentSchema.index({ name: 1 });
+agentSchema.index({ createdAt: -1 });
+
+
 module.exports = mongoose.model('Agent', agentSchema)

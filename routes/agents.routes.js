@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {createAgent, getAgent, getAllAgents, updateAgent, deleteAgent, restoreAgent} = require('../controllers/agent.controller');
+const {createAgent, getAgent, getAllAgents, updateAgent, deleteAgent, restoreAgent, getDeletedAgents} = require('../controllers/agent.controller');
 const {protect, isAdmin} = require('../middlewares/auth.middleware');
 const { route } = require('./auth.routes');
 const { getAgentsList } = require('../controllers/dailyLog.controller');
@@ -17,5 +17,7 @@ router.route('/:id')
 router.put('/restore/:id', protect, isAdmin, restoreAgent)
 
 router.get('/list',protect, getAgentsList)
+
+router.get('/deleted', protect, isAdmin, getDeletedAgents);
 
 module.exports = router;
